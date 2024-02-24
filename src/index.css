@@ -1,0 +1,91 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  h1 {
+    @apply text-2xl;
+    @apply font-bold;
+  }
+  h2 {
+    @apply text-xl;
+    @apply font-semibold;
+  }
+  h3 {
+    @apply text-lg;
+    @apply font-semibold;
+  }
+  h4 {
+    @apply text-base;
+    @apply font-semibold;
+  }
+  h5 {
+    @apply text-sm;
+    @apply font-semibold;
+  }
+  h6 {
+    @apply text-xs;
+    @apply font-semibold;
+  }
+
+  p,
+  span,
+  li,
+  div {
+    @apply text-base;
+    @apply font-normal;
+  }
+}
+
+html {
+  height: 100%;
+  line-height: 1.2;
+}
+
+body {
+  line-height: 1;
+}
+
+a:-webkit-any-link {
+  text-decoration: none;
+}
+
+.container {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  min-width: 320px;
+  padding: 0 16px;
+}
+
+@media (min-width: 768px) {
+  .container {
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    max-width: 1400px;
+    padding-left: 32px;
+    padding-right: 32px;
+    width: 100%;
+  }
+}
+
+@media (min-width: 1200px) {
+  .container {
+    padding-left: 72px;
+    padding-right: 72px;
+  }
+}
+
+@media (min-width: 1440px) {
+  .container {
+    padding-left: 96px;
+    padding-right: 96px;
+  }
+}
