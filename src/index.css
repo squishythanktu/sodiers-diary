@@ -1,6 +1,4 @@
 @tailwind base;
-@tailwind components;
-@tailwind utilities;
 
 @layer base {
   h1 {
@@ -36,6 +34,9 @@
     @apply font-normal;
   }
 }
+
+@tailwind components;
+@tailwind utilities;
 
 html {
   height: 100%;
@@ -73,19 +74,5 @@ a:-webkit-any-link {
     padding-left: 32px;
     padding-right: 32px;
     width: 100%;
-  }
-}
-
-@media (min-width: 1200px) {
-  .container {
-    padding-left: 72px;
-    padding-right: 72px;
-  }
-}
-
-@media (min-width: 1440px) {
-  .container {
-    padding-left: 96px;
-    padding-right: 96px;
   }
 }

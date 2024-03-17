@@ -24,10 +24,10 @@ const Register: React.FC = () => {
         <div className="mb-2 flex flex-col items-center justify-center">
           <div className="flex items-center gap-2">
             <IconStar style={{ width: rem(40), height: rem(40) }} stroke={1.5} fill="yellow" color="yellow" />
-            <h1 className="m-0 text-red-500">Nhật ký điện tử</h1>
+            <h1 className="m-0 text-[40px] text-red-500">Nhật ký điện tử</h1>
             <IconStar style={{ width: rem(40), height: rem(40) }} stroke={1.5} fill="yellow" color="yellow" />
           </div>
-          <h2 className="text-green-500">Sẻ chia & Thấu hiểu</h2>
+          <h2 className="text-[25px] text-green-500">Sẻ chia & Thấu hiểu</h2>
         </div>
         <form
           onSubmit={registerForm.onSubmit((values) => console.log(values))}
