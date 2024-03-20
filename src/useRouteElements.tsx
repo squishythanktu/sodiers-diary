@@ -4,11 +4,13 @@ import PATH from './constants/path.constant';
 import { AppContext } from './contexts/app.context';
 import ManagementLayout from './layouts/ManagementLayout';
 import Loading from './components/Loading';
-import MyDiary from './pages/MyDiary';
 
 const Login = lazy(() => import('./pages/Login/Login'));
 const Register = lazy(() => import('./pages/Register/Register'));
 const NotFound = lazy(() => import('./pages/NotFound/NotFound'));
+const MyDiary = lazy(() => import('./pages/MyDiary'));
+const Users = lazy(() => import('./pages/Users/'));
+const AddUser = lazy(() => import('./pages/AddUser/'));
 
 const ProtectedRoute = () => {
   const { isAuthenticated } = useContext(AppContext);
@@ -41,6 +43,22 @@ export default function useRouteElements() {
           element: (
             <Suspense fallback={<Loading />}>
               <MyDiary />
+            </Suspense>
+          ),
+        },
+        {
+          path: PATH.users,
+          element: (
+            <Suspense fallback={<Loading />}>
+              <Users />
+            </Suspense>
+          ),
+        },
+        {
+          path: PATH.addUser,
+          element: (
+            <Suspense fallback={<Loading />}>
+              <AddUser />
             </Suspense>
           ),
         },

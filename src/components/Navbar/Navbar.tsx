@@ -40,11 +40,17 @@ export default function NavBar() {
           label={<Text size="lg">Danh sách người dùng</Text>}
           icon={<IconUsersGroup size="1rem" stroke={1.5} />}
           className="text-base"
+          component={Link}
+          to={PATH.users}
+          active={location.pathname === PATH.users}
         />
         <NavLink
           label={<Text size="lg">Thêm mới người dùng</Text>}
           icon={<IconUserPlus size="1rem" stroke={1.5} />}
           className="text-base"
+          component={Link}
+          to={PATH.addUser}
+          active={location.pathname === PATH.addUser}
         />
         <NavLink
           label={<Text size="lg">Công cụ hệ thống</Text>}
