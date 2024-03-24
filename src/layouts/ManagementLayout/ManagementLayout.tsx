@@ -7,7 +7,7 @@ export default function ManagementLayout() {
   return (
     <div className="container mt-8 text-sm text-gray-600">
       <div className="header mb-4 flex gap-12">
-        <img src="/src/assets/images/logo.jpg" alt="logo" className="w-3h-32 h-32 object-contain" />
+        <img src="/assets/images/logo.jpg" alt="logo" className="w-3h-32 h-32 object-contain" />
         <div className="mb-2 flex flex-1 flex-col items-start">
           <div className="flex items-center justify-start gap-2">
             <IconStar style={{ width: rem(40), height: rem(40) }} stroke={1.5} fill="yellow" color="yellow" />
