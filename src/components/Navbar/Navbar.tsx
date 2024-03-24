@@ -1,14 +1,14 @@
 import { NavLink, Paper, Text } from '@mantine/core';
 import {
-  IconUser,
-  IconMoodHappy,
   IconLogout,
+  IconMoodHappy,
   IconNotebook,
-  IconUsersGroup,
+  IconPasswordUser,
+  IconUser,
+  IconUserEdit,
   IconUserPlus,
-  IconTool,
-  IconFlag2,
-  IconMoodSearch,
+  IconUserSquare,
+  IconUsersGroup,
 } from '@tabler/icons-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import PATH from 'src/constants/path.constant';
@@ -38,10 +38,13 @@ export default function NavBar() {
         label={<Text size="lg">Công cụ cảm xúc</Text>}
         icon={<IconMoodHappy size="1rem" stroke={1.5} />}
         className="text-base"
+        component={Link}
+        to={PATH.statisticTool}
+        active={location.pathname === PATH.statisticTool}
       />
       <NavLink
         label={<Text size="lg">Quản trị người dùng</Text>}
-        icon={<IconUser size="1rem" stroke={1.5} />}
+        icon={<IconUserSquare size="1rem" stroke={1.5} />}
         className="text-base"
       >
         <NavLink
@@ -60,7 +63,7 @@ export default function NavBar() {
           to={PATH.addUser}
           active={location.pathname === PATH.addUser}
         />
-        <NavLink
+        {/* <NavLink
           label={<Text size="lg">Công cụ hệ thống</Text>}
           icon={<IconTool size="1rem" stroke={1.5} />}
           className="text-base"
@@ -75,7 +78,29 @@ export default function NavBar() {
             icon={<IconFlag2 size="1rem" stroke={1.5} />}
             className="text-base"
           />
-        </NavLink>
+        </NavLink> */}
+      </NavLink>
+      <NavLink
+        label={<Text size="lg">Tài khoản</Text>}
+        icon={<IconUser size="1rem" stroke={1.5} />}
+        className="text-base"
+      >
+        <NavLink
+          label={<Text size="lg">Cập nhật thông tin</Text>}
+          icon={<IconUserEdit size="1rem" stroke={1.5} />}
+          className="text-base"
+          component={Link}
+          to={PATH.profile}
+          active={location.pathname === PATH.profile}
+        />
+        <NavLink
+          label={<Text size="lg">Đổi mật khẩu</Text>}
+          icon={<IconPasswordUser size="1rem" stroke={1.5} />}
+          className="text-base"
+          component={Link}
+          to={PATH.changePassword}
+          active={location.pathname === PATH.changePassword}
+        />
       </NavLink>
       <NavLink
         label={<Text size="lg">Đăng xuất</Text>}

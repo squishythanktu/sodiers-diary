@@ -1,16 +1,5 @@
-import {
-  Badge,
-  Box,
-  Card,
-  Checkbox,
-  Grid,
-  Group,
-  ScrollArea,
-  Text,
-  TextInput,
-  Textarea,
-  Button,
-} from '@mantine/core';
+import { Box, Button, Checkbox, Grid, Group, ScrollArea, TextInput, Textarea } from '@mantine/core';
+import DiaryCard from './DiaryCard';
 
 export default function MyDiary() {
   return (
@@ -48,106 +37,10 @@ export default function MyDiary() {
       </Grid.Col>
       <Grid.Col span={6}>
         <ScrollArea h={500} className="flex flex-col">
-          <Card shadow="sm" padding="lg" radius="md" mb="sm" withBorder>
-            <Group className="flex justify-between" mb="xs">
-              <Text fw={800} color="red">
-                19/02
-              </Text>
-              <Text fw={800} color="red">
-                20/03/2021
-              </Text>
-            </Group>
-
-            <Text size="sm" c="dimmed" mt="xs" mb="xs">
-              <strong>Bạn đang cảm thấy: </strong>
-              <span>Hạnh phúc</span>
-            </Text>
-            <Text size="sm" c="dimmed" mt="xs" mb="xs">
-              <strong>Lý do: </strong>
-              <span>Các học viên có rất nhiều cố gắng trong hội thi</span>
-            </Text>
-            <Group justify="space-between" mt="xs">
-              <Text size="sm" c="dimmed">
-                <strong>Hashtag: </strong>
-              </Text>
-              <Badge color="blue">hoithaotieudoan</Badge>
-            </Group>
-          </Card>
-          <Card shadow="sm" padding="lg" radius="md" mb="sm" withBorder>
-            <Group className="flex justify-between" mb="xs">
-              <Text fw={800} color="red">
-                19/02
-              </Text>
-              <Text fw={800} color="red">
-                20/03/2021
-              </Text>
-            </Group>
-
-            <Text size="sm" c="dimmed" mt="xs" mb="xs">
-              <strong>Bạn đang cảm thấy: </strong>
-              <span>Hạnh phúc</span>
-            </Text>
-            <Text size="sm" c="dimmed" mt="xs" mb="xs">
-              <strong>Lý do: </strong>
-              <span>Các học viên có rất nhiều cố gắng trong hội thi</span>
-            </Text>
-            <Group justify="space-between" mt="xs">
-              <Text size="sm" c="dimmed">
-                <strong>Hashtag: </strong>
-              </Text>
-              <Badge color="blue">hoithaotieudoan</Badge>
-            </Group>
-          </Card>
-          <Card shadow="sm" padding="lg" radius="md" mb="sm" withBorder>
-            <Group className="flex justify-between" mb="xs">
-              <Text fw={800} color="red">
-                19/02
-              </Text>
-              <Text fw={800} color="red">
-                20/03/2021
-              </Text>
-            </Group>
-
-            <Text size="sm" c="dimmed" mt="xs" mb="xs">
-              <strong>Bạn đang cảm thấy: </strong>
-              <span>Hạnh phúc</span>
-            </Text>
-            <Text size="sm" c="dimmed" mt="xs" mb="xs">
-              <strong>Lý do: </strong>
-              <span>Các học viên có rất nhiều cố gắng trong hội thi</span>
-            </Text>
-            <Group justify="space-between" mt="xs">
-              <Text size="sm" c="dimmed">
-                <strong>Hashtag: </strong>
-              </Text>
-              <Badge color="blue">hoithaotieudoan</Badge>
-            </Group>
-          </Card>
-          <Card shadow="sm" padding="lg" radius="md" mb="sm" withBorder>
-            <Group className="flex justify-between" mb="xs">
-              <Text fw={800} color="red">
-                19/02
-              </Text>
-              <Text fw={800} color="red">
-                20/03/2021
-              </Text>
-            </Group>
-
-            <Text size="sm" c="dimmed" mt="xs" mb="xs">
-              <strong>Bạn đang cảm thấy: </strong>
-              <span>Hạnh phúc</span>
-            </Text>
-            <Text size="sm" c="dimmed" mt="xs" mb="xs">
-              <strong>Lý do: </strong>
-              <span>Các học viên có rất nhiều cố gắng trong hội thi</span>
-            </Text>
-            <Group justify="space-between" mt="xs">
-              <Text size="sm" c="dimmed">
-                <strong>Hashtag: </strong>
-              </Text>
-              <Badge color="blue">hoithaotieudoan</Badge>
-            </Group>
-          </Card>
+          <DiaryCard />
+          <DiaryCard />
+          <DiaryCard />
+          <DiaryCard />
         </ScrollArea>
       </Grid.Col>
     </Grid>

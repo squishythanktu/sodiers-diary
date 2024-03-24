@@ -1,10 +1,10 @@
 export interface User {
-  id: string;
-  userName: string;
+  id?: string;
+  userName?: string;
   name?: string;
   phoneNumber?: string;
   email?: string;
-  roleId: number;
+  roleId?: number;
   rankId: number;
   positionId: number;
   companiesId: number;

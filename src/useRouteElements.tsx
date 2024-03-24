@@ -12,6 +12,8 @@ const MyDiary = lazy(() => import('./pages/MyDiary'));
 const Users = lazy(() => import('./pages/Users/'));
 const AddUser = lazy(() => import('./pages/AddUser/'));
 const Profile = lazy(() => import('./pages/Profile'));
+const ChangePassword = lazy(() => import('./pages/ChangePassword'));
+const StatisticTool = lazy(() => import('./pages/StatisticTool'));
 
 const ProtectedRoute = () => {
   const { isAuthenticated } = useContext(AppContext);
@@ -72,6 +74,14 @@ export default function useRouteElements() {
               ),
             },
             {
+              path: PATH.statisticTool,
+              element: (
+                <Suspense fallback={<Loading />}>
+                  <StatisticTool />
+                </Suspense>
+              ),
+            },
+            {
               path: PATH.users,
               element: (
                 <Suspense fallback={<Loading />}>
@@ -92,6 +102,14 @@ export default function useRouteElements() {
               element: (
                 <Suspense fallback={<Loading />}>
                   <Profile />
+                </Suspense>
+              ),
+            },
+            {
+              path: PATH.changePassword,
+              element: (
+                <Suspense fallback={<Loading />}>
+                  <ChangePassword />
                 </Suspense>
               ),
             },
