@@ -11,10 +11,10 @@ export default function ManagementLayout() {
         <div className="mb-2 flex flex-1 flex-col items-start">
           <div className="flex items-center justify-start gap-2">
             <IconStar style={{ width: rem(40), height: rem(40) }} stroke={1.5} fill="yellow" color="yellow" />
-            <h1 className="m-0 text-[45px] text-red-500">Nhật ký điện tử</h1>
+            <h2 className="m-0 text-3xl text-red-500">Nhật ký điện tử</h2>
             <IconStar style={{ width: rem(40), height: rem(40) }} stroke={1.5} fill="yellow" color="yellow" />
           </div>
-          <h2 className="text-5xl uppercase text-green-500">Sẻ chia & Thấu hiểu</h2>
+          <h3 className="my-6 text-4xl uppercase text-green-500">Sẻ chia & Thấu hiểu</h3>
         </div>
       </div>
       <div className="divider my-2 w-full border-x-0 border-b-[3px] border-t-[3px] border-solid border-yellow-500">

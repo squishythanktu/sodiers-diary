@@ -11,15 +11,16 @@ const NotFound = lazy(() => import('./pages/NotFound/NotFound'));
 const MyDiary = lazy(() => import('./pages/MyDiary'));
 const Users = lazy(() => import('./pages/Users/'));
 const AddUser = lazy(() => import('./pages/AddUser/'));
+const Profile = lazy(() => import('./pages/Profile'));
 
 const ProtectedRoute = () => {
   const { isAuthenticated } = useContext(AppContext);
-  return isAuthenticated ? <Outlet /> : <Navigate to="/" />;
+  return isAuthenticated ? <Outlet /> : <Navigate to={PATH.home} />;
 };
 
 const RejectedRoute = () => {
   const { isAuthenticated } = useContext(AppContext);
-  return !isAuthenticated ? <Outlet /> : <Navigate to="/" />;
+  return !isAuthenticated ? <Outlet /> : <Navigate to={PATH.management} />;
 };
 
 export default function useRouteElements() {
@@ -27,59 +28,76 @@ export default function useRouteElements() {
     {
       path: '/',
       element: <RejectedRoute />,
-      children: [],
-    },
-    {
-      path: '/',
-      element: <ProtectedRoute />,
-      children: [],
-    },
-    {
-      path: PATH.management,
-      element: <ManagementLayout></ManagementLayout>,
       children: [
         {
-          path: PATH.myDiary,
+          path: PATH.home,
+          element: <Navigate to={PATH.login} />,
+        },
+        {
+          path: PATH.login,
           element: (
             <Suspense fallback={<Loading />}>
-              <MyDiary />
+              <Login />
             </Suspense>
           ),
         },
         {
-          path: PATH.users,
+          path: PATH.register,
           element: (
             <Suspense fallback={<Loading />}>
-              <Users />
-            </Suspense>
-          ),
-        },
-        {
-          path: PATH.addUser,
-          element: (
-            <Suspense fallback={<Loading />}>
-              <AddUser />
+              <Register />
             </Suspense>
           ),
         },
       ],
     },
     {
-      path: '',
-      index: true,
-      element: (
-        <Suspense fallback={<Loading />}>
-          <Login />
-        </Suspense>
-      ),
-    },
-    {
-      path: PATH.register,
-      element: (
-        <Suspense fallback={<Loading />}>
-          <Register />
-        </Suspense>
-      ),
+      path: '/',
+      element: <ProtectedRoute />,
+      children: [
+        {
+          path: PATH.home,
+          element: <Navigate to={PATH.management} />,
+        },
+        {
+          path: PATH.management,
+          element: <ManagementLayout></ManagementLayout>,
+          children: [
+            {
+              path: PATH.myDiary,
+              element: (
+                <Suspense fallback={<Loading />}>
+                  <MyDiary />
+                </Suspense>
+              ),
+            },
+            {
+              path: PATH.users,
+              element: (
+                <Suspense fallback={<Loading />}>
+                  <Users />
+                </Suspense>
+              ),
+            },
+            {
+              path: PATH.addUser,
+              element: (
+                <Suspense fallback={<Loading />}>
+                  <AddUser />
+                </Suspense>
+              ),
+            },
+            {
+              path: PATH.profile,
+              element: (
+                <Suspense fallback={<Loading />}>
+                  <Profile />
+                </Suspense>
+              ),
+            },
+          ],
+        },
+      ],
     },
     {
       path: '*',

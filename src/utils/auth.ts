@@ -2,10 +2,10 @@ import { User } from '../types/user.type';
 
 export const LocalStorageEventTarget = new EventTarget();
 
-export const getAccessTokenFromLocalStorage = () => localStorage.getItem('access_token') || '';
+export const getAccessTokenFromLocalStorage = () => localStorage.getItem('token') || '';
 
-export const setAccessTokenToLS = (accessToken: string) => {
-  localStorage.setItem('access_token', accessToken);
+export const setAccessTokenToLS = (token: string) => {
+  localStorage.setItem('token', token);
 };
 
 export const getProfileFromLS = () => {
@@ -18,7 +18,7 @@ export const setProfileToLS = (profile: User) => {
 };
 
 export const clearLS = () => {
-  localStorage.removeItem('access_token');
+  localStorage.removeItem('token');
   localStorage.removeItem('profile');
   LocalStorageEventTarget.dispatchEvent(new Event('clearLS'));
 };

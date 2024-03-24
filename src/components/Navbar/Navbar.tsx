@@ -10,11 +10,19 @@ import {
   IconFlag2,
   IconMoodSearch,
 } from '@tabler/icons-react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import PATH from 'src/constants/path.constant';
+import { clearLS } from 'src/utils/auth';
 
 export default function NavBar() {
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    clearLS();
+    navigate(PATH.home);
+    window.location.reload();
+  };
 
   return (
     <Paper shadow="xs" p="sm">
@@ -73,6 +81,7 @@ export default function NavBar() {
         label={<Text size="lg">Đăng xuất</Text>}
         icon={<IconLogout size="1rem" stroke={1.5} />}
         className="text-base"
+        onClick={handleLogout}
       />
     </Paper>
   );

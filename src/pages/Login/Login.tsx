@@ -1,17 +1,40 @@
-import AuthLayout from 'src/layouts/AuthLayout';
+import { Box, Button, Group, PasswordInput, TextInput, rem } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { Link } from 'react-router-dom';
-import PATH from 'src/constants/path.constant';
-import { Box, Button, Group, TextInput, rem } from '@mantine/core';
 import { IconStar } from '@tabler/icons-react';
+import { useMutation } from '@tanstack/react-query';
+import { AxiosResponse } from 'axios';
+import { useContext } from 'react';
+import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import authApi from 'src/api/auth.api';
+import PATH from 'src/constants/path.constant';
+import { AppContext } from 'src/contexts/app.context';
+import AuthLayout from 'src/layouts/AuthLayout';
+import { UserReq } from 'src/types/user.type';
 
 const Login: React.FC = () => {
+  const { setIsAuthenticated, setProfile } = useContext(AppContext);
   const loginForm = useForm({
     initialValues: {
       username: '',
       password: '',
     },
   });
+  const loginMutation = useMutation({
+    mutationFn: (body: UserReq) => authApi.login(body),
+  });
+
+  const handleLogin = (body: UserReq) => {
+    loginMutation.mutate(body, {
+      onSuccess: (res: AxiosResponse<any, any>) => {
+        setIsAuthenticated(true);
+        setProfile(res.data);
+      },
+      onError: (error: any) => {
+        toast.error(error.response.data.message);
+      },
+    });
+  };
 
   return (
     <AuthLayout>
@@ -28,10 +51,7 @@ const Login: React.FC = () => {
           </div>
           <h2 className="text-[25px] text-green-500">Sẻ chia & Thấu hiểu</h2>
         </div>
-        <form
-          onSubmit={loginForm.onSubmit((values) => console.log(values))}
-          className="flex w-full flex-col gap-4"
-        >
+        <form onSubmit={loginForm.onSubmit(handleLogin)} className="flex w-full flex-col gap-4">
           <div className="form__header flex items-center">
             <div className="form flex flex-col gap-2 bg-white">
               <div className="flex">
@@ -50,7 +70,7 @@ const Login: React.FC = () => {
               size="md"
               {...loginForm.getInputProps('username')}
             />
-            <TextInput
+            <PasswordInput
               className="w-auto"
               label="Mật khẩu"
               placeholder="Mật khẩu"
@@ -65,7 +85,7 @@ const Login: React.FC = () => {
               </Link>
             </div>
             <Group className="ml-auto w-1/2" mt="md">
-              <Button className="w-full" type="submit">
+              <Button loading={loginMutation.isPending} className="w-full" type="submit">
                 Đăng nhập
               </Button>
             </Group>
