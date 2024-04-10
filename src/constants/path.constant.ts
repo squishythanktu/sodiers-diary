@@ -8,7 +8,7 @@ const PATH = {
   profile: '/management/profile',
   changePassword: '/management/change-password',
   login: '/login',
-  register: '/register',
+  // register: '/register',
 };
 
 export default PATH;

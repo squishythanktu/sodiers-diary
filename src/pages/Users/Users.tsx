@@ -1,4 +1,4 @@
-import { Table, ActionIcon, Pagination, Group, Box, Modal, Button } from '@mantine/core';
+import { ActionIcon, Box, Button, Group, Modal, Pagination, Table } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconTrash } from '@tabler/icons-react';
 import { useMutation, useQuery } from '@tanstack/react-query';
@@ -11,7 +11,6 @@ import rankApi from 'src/api/rank.api';
 import userApi from 'src/api/user.api';
 import { UserRole } from 'src/enums/role.enum';
 import { PaginationParams } from 'src/types/pagination-params.type';
-import { Position } from 'src/types/position.type';
 import { User } from 'src/types/user.type';
 
 export default function Users() {
@@ -75,13 +74,9 @@ export default function Users() {
             <th>Id</th>
             <th>Tên người dùng</th>
             <th>Họ và tên</th>
-            {/* Rank */}
             <th>Cấp bậc</th>
-            {/* Position */}
             <th>Chức vụ</th>
-            {/* Company */}
             <th>Đại đội</th>
-            {/* Role */}
             <th>Vai trò</th>
             <th>#</th>
           </tr>
@@ -92,9 +87,9 @@ export default function Users() {
               <td>{user.id}</td>
               <td>{user.userName || 'N/A'}</td>
               <td>{user.name || 'N/A'}</td>
-              <td>{getRankNameById(user.rankId) || 'N/A'}</td>
-              <td>{getPositionNameById(user.positionId) || 'N/A'}</td>
-              <td>{getCompanyNameById(user.companiesId) || 'N/A'}</td>
+              <td>{getRankNameById(user.rankId as number) || 'N/A'}</td>
+              <td>{getPositionNameById(user.positionId as number) || 'N/A'}</td>
+              <td>{getCompanyNameById(user.companiesId as number) || 'N/A'}</td>
               <td>{user.id === 1 ? UserRole.ADMIN : UserRole.USER}</td>
               <ActionIcon
                 variant="transparent"

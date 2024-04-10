@@ -1,13 +1,13 @@
 export interface User {
   id: number;
-  userName?: string;
+  userName: string;
   name?: string;
   phoneNumber?: string;
   email?: string;
   roleId?: number;
-  rankId: number;
-  positionId: number;
-  companiesId: number;
+  rankId: number | null;
+  positionId: number | null;
+  companiesId: number | null;
 }
 
 export type UserReq = {

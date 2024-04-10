@@ -1,12 +1,11 @@
 import { Suspense, lazy, useContext } from 'react';
 import { Navigate, Outlet, useRoutes } from 'react-router-dom';
+import Loading from './components/Loading';
 import PATH from './constants/path.constant';
 import { AppContext } from './contexts/app.context';
 import ManagementLayout from './layouts/ManagementLayout';
-import Loading from './components/Loading';
 
 const Login = lazy(() => import('./pages/Login/Login'));
-const Register = lazy(() => import('./pages/Register/Register'));
 const NotFound = lazy(() => import('./pages/NotFound/NotFound'));
 const MyDiary = lazy(() => import('./pages/MyDiary'));
 const Users = lazy(() => import('./pages/Users/'));
@@ -40,14 +39,6 @@ export default function useRouteElements() {
           element: (
             <Suspense fallback={<Loading />}>
               <Login />
-            </Suspense>
-          ),
-        },
-        {
-          path: PATH.register,
-          element: (
-            <Suspense fallback={<Loading />}>
-              <Register />
             </Suspense>
           ),
         },

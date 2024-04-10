@@ -1,30 +1,33 @@
-import { Card, Group, Badge, Text } from '@mantine/core';
+import { Badge, Card, Group, Text } from '@mantine/core';
+import dayjs from 'dayjs';
+import { Diary } from 'src/types/diary.type';
 
-export default function DiaryCard() {
+interface DiaryCardProps {
+  data: Diary;
+}
+
+export default function DiaryCard({ data }: DiaryCardProps) {
   return (
     <Card shadow="sm" padding="lg" radius="md" mb="sm" withBorder>
       <Group className="flex justify-between" mb="xs">
         <Text fw={800} color="red">
-          19/02
-        </Text>
-        <Text fw={800} color="red">
-          20/03/2021
+          {dayjs(data.createdAt).format('DD/MM/YYYY')}
         </Text>
       </Group>
 
       <Text size="sm" c="dimmed" mt="xs" mb="xs">
         <strong>Bạn đang cảm thấy: </strong>
-        <span>Hạnh phúc</span>
+        <span>{data.reactionId}</span>
       </Text>
       <Text size="sm" c="dimmed" mt="xs" mb="xs">
         <strong>Lý do: </strong>
-        <span>Các học viên có rất nhiều cố gắng trong hội thi</span>
+        <span>{data.description}</span>
       </Text>
-      <Group className="flex justify-between" mt="xs">
+      <Group className="flex gap-4" mt="xs">
         <Text size="sm" c="dimmed">
           <strong>Hashtag: </strong>
         </Text>
-        <Badge color="blue">hoithaotieudoan</Badge>
+        <Badge color="blue">{data.hashtag}</Badge>
       </Group>
     </Card>
   );

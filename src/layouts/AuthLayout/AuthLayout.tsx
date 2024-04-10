@@ -12,11 +12,13 @@ export default function AuthLayout({ children }: Props) {
           <div className="mx-6 my-auto w-auto">{children}</div>
         </div>
         <Box
+          component="img"
           className="image hidden bg-cover bg-center lg:col-span-3 lg:col-start-3 lg:block"
           sx={{
             backgroundImage: `url('/assets/images/auth-cover.jpg')`,
             objectFit: 'contain',
           }}
+          loading="lazy"
         ></Box>
       </div>
     </div>

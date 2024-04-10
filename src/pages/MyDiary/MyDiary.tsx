@@ -1,7 +1,26 @@
 import { Box, Button, Checkbox, Grid, Group, ScrollArea, TextInput, Textarea } from '@mantine/core';
 import DiaryCard from './DiaryCard';
+import { useQuery } from '@tanstack/react-query';
+import { useContext, useState } from 'react';
+import { AppContext } from 'src/contexts/app.context';
+import { PaginationParams } from 'src/types/pagination-params.type';
+import diaryApi from 'src/api/diary.api';
 
 export default function MyDiary() {
+  const { profile } = useContext(AppContext);
+  const [paginationParams, __setPaginationParams] = useState<PaginationParams>({
+    page: 1,
+    size: 10,
+  });
+  const { data: diariesData } = useQuery({
+    queryKey: [
+      `diaries of user ${profile!.userName} in page ${paginationParams.page}`,
+      profile?.userName,
+      paginationParams,
+    ],
+    queryFn: () => diaryApi.getDiaries(paginationParams),
+  });
+
   return (
     <Grid>
       <Grid.Col span={6} className="flex flex-col gap-2">
@@ -37,10 +56,9 @@ export default function MyDiary() {
       </Grid.Col>
       <Grid.Col span={6}>
         <ScrollArea h={500} className="flex flex-col">
-          <DiaryCard />
-          <DiaryCard />
-          <DiaryCard />
-          <DiaryCard />
+          {diariesData?.data.map((data) => (
+            <DiaryCard key={data.id} data={data} />
+          ))}
         </ScrollArea>
       </Grid.Col>
     </Grid>
