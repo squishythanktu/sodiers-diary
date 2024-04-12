@@ -8,6 +8,9 @@ const diaryApi = {
   getDiaries(params: PaginationParams) {
     return http.get<Diary[]>(`${URL_DIARIES}`, { params });
   },
+  createDiary(data: Diary) {
+    return http.post<unknown>(`${URL_DIARIES}/save`, data);
+  },
 };
 
 export default diaryApi;

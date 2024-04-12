@@ -1,8 +1,8 @@
 export type Diary = {
-  id: number;
+  id?: number;
   reactionId: number;
   description: string;
   hashtag: string;
   userId: number;
-  createdAt: Date;
+  createdAt?: Date;
 };

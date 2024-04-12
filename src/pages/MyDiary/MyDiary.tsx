@@ -1,10 +1,14 @@
-import { Box, Button, Checkbox, Grid, Group, ScrollArea, TextInput, Textarea } from '@mantine/core';
-import DiaryCard from './DiaryCard';
-import { useQuery } from '@tanstack/react-query';
+import { Box, Button, Card, Grid, Group, Radio, ScrollArea, TextInput, Textarea } from '@mantine/core';
+import { useForm } from '@mantine/form';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useContext, useState } from 'react';
-import { AppContext } from 'src/contexts/app.context';
-import { PaginationParams } from 'src/types/pagination-params.type';
 import diaryApi from 'src/api/diary.api';
+import reactionApi from 'src/api/reaction.api';
+import { AppContext } from 'src/contexts/app.context';
+import { Diary } from 'src/types/diary.type';
+import { PaginationParams } from 'src/types/pagination-params.type';
+import DiaryCard from './DiaryCard';
+import { toast } from 'react-toastify';
 
 export default function MyDiary() {
   const { profile } = useContext(AppContext);
@@ -12,7 +16,17 @@ export default function MyDiary() {
     page: 1,
     size: 10,
   });
-  const { data: diariesData } = useQuery({
+  const [selectedPositive, setSelectedPositive] = useState('');
+  const [selectedNegative, setSelectedNegative] = useState('');
+  const diaryForm = useForm<Diary>({
+    initialValues: {
+      userId: profile?.id as number,
+      description: '',
+      hashtag: '',
+      reactionId: 0,
+    },
+  });
+  const { data: diariesData, refetch } = useQuery({
     queryKey: [
       `diaries of user ${profile!.userName} in page ${paginationParams.page}`,
       profile?.userName,
@@ -20,42 +34,108 @@ export default function MyDiary() {
     ],
     queryFn: () => diaryApi.getDiaries(paginationParams),
   });
+  const { data: positiveData } = useQuery({
+    queryKey: ['positive reactions'],
+    queryFn: () => reactionApi.getPositiveReactions(),
+    staleTime: 5 * 60 * 1000,
+  });
+  const { data: negativeData } = useQuery({
+    queryKey: ['negative reactions'],
+    queryFn: () => reactionApi.getNegativeReactions(),
+    staleTime: 5 * 60 * 1000,
+  });
+
+  const handlePositiveChange = (value: string) => {
+    setSelectedPositive(value);
+    setSelectedNegative('');
+  };
+
+  const handleNegativeChange = (value: string) => {
+    setSelectedNegative(value);
+    setSelectedPositive('');
+  };
+
+  const createDiaryMutation = useMutation({
+    mutationFn: (data: Diary) => diaryApi.createDiary(data),
+  });
+
+  const handleCreateDiary = (values: Diary) => {
+    const formatedData: Diary = {
+      ...values,
+      reactionId:
+        positiveData?.data.find((data) => data.name === selectedPositive)?.id ||
+        negativeData?.data.find((data) => data.name === selectedNegative)?.id ||
+        0,
+    };
+
+    createDiaryMutation.mutate(formatedData, {
+      onSuccess: () => {
+        toast.success('Create diary successfully.');
+        refetch();
+      },
+      onError: () => {
+        toast.error('Create diary failed.');
+      },
+    });
+  };
 
   return (
     <Grid>
-      <Grid.Col span={6} className="flex flex-col gap-2">
-        <h3>Cảm xúc hiện tại của bạn thế nào?</h3>
-        <Box className="flex w-full gap-2">
-          <Checkbox.Group label="Tích cực:" size="md" className="h-full w-1/2">
-            <Group mt="xs" className="flex flex-col items-start border-solid border-yellow-500 p-4">
-              <Checkbox value="thich-thu" label="Thích thú" />
-              <Checkbox value="svelte" label="Vui sướng" />
-              <Checkbox value="vue" label="Phấn khởi" />
-              <Checkbox value="ngd" label="Hạnh phúc" />
-              <Checkbox value="ng" label="Lạc quan" />
-            </Group>
-          </Checkbox.Group>
-          <Checkbox.Group label="Tiêu cực:" size="md" className="h-full w-1/2">
-            <Group mt="xs" className="flex flex-col items-start border-solid border-blue-500 p-4">
-              <Checkbox value="thich-thu" label="Mệt mỏi" />
-              <Checkbox value="svelte" label="Lo lắng" />
-              <Checkbox value="vue" label="Buồn bã" />
-              <Checkbox value="ngd" label="Chán nản" />
-              <Checkbox value="ng" label="Thất vọng" />
-              <Checkbox value="ng" label="Căng thẳng" />
-              <Checkbox value="ng" label="Bị áp lực" />
-              <Checkbox value="ng" label="Chưa đoàn kết" />
-            </Group>
-          </Checkbox.Group>
-        </Box>
-        <Textarea size="md" label="Suy nghĩ" placeholder="Nhập suy nghĩ của bạn" />
-        <TextInput size="md" label="Hashtag" placeholder="Nhập hashtag" mb="sm" />
-        <Button variant="filled" className="w-fit">
-          Cập nhật
-        </Button>
+      <Grid.Col span={6}>
+        <form onSubmit={diaryForm.onSubmit(handleCreateDiary)}>
+          <Card className="flex flex-col gap-2" padding="lg" radius="md" withBorder>
+            <h3 className="my-0">
+              Cảm xúc hiện tại của bạn thế nào? <span className="text-red-500">*</span>
+            </h3>
+            <Box className="flex w-full gap-2">
+              <Group className="flex h-full w-1/2 flex-col gap-0">
+                <p className="w-full text-start font-bold">Tích cực</p>
+                <Radio.Group
+                  mt="xs"
+                  className="mt-0 flex w-full flex-col items-start gap-4 border-solid border-yellow-500 p-4"
+                  value={selectedPositive}
+                  onChange={handlePositiveChange}
+                >
+                  {positiveData?.data.map((reaction) => (
+                    <Radio key={reaction.name} value={reaction.name} label={reaction.name} />
+                  ))}
+                </Radio.Group>
+              </Group>
+              <Group className="flex h-full w-1/2 flex-col gap-0">
+                <p className="w-full text-start font-bold">Tiêu cực</p>
+                <Radio.Group
+                  mt="xs"
+                  className="mt-0 flex w-full flex-col items-start gap-4 border-solid border-blue-500 p-4"
+                  value={selectedNegative}
+                  onChange={handleNegativeChange}
+                >
+                  {negativeData?.data.map((reaction) => (
+                    <Radio key={reaction.name} value={reaction.name} label={reaction.name} />
+                  ))}
+                </Radio.Group>
+              </Group>
+            </Box>
+            <Textarea
+              size="md"
+              label="Suy nghĩ"
+              placeholder="Nhập suy nghĩ của bạn"
+              {...diaryForm.getInputProps('description')}
+            />
+            <TextInput
+              size="md"
+              label="Hashtag"
+              placeholder="Nhập hashtag"
+              mb="sm"
+              {...diaryForm.getInputProps('hashtag')}
+            />
+            <Button type="submit" variant="filled" className="ml-auto flex">
+              Cập nhật
+            </Button>
+          </Card>
+        </form>
       </Grid.Col>
       <Grid.Col span={6}>
-        <ScrollArea h={500} className="flex flex-col">
+        <ScrollArea h={710} className="flex flex-col">
           {diariesData?.data.map((data) => (
             <DiaryCard key={data.id} data={data} />
           ))}

@@ -13,7 +13,7 @@ export default function AuthLayout({ children }: Props) {
         </div>
         <Box
           component="img"
-          className="image hidden bg-cover bg-center lg:col-span-3 lg:col-start-3 lg:block"
+          className="image hidden h-full w-full bg-cover bg-center lg:col-span-3 lg:col-start-3 lg:block"
           sx={{
             backgroundImage: `url('/assets/images/auth-cover.jpg')`,
             objectFit: 'contain',
