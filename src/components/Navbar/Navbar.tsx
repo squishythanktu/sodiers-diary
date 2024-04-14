@@ -10,13 +10,16 @@ import {
   IconUserSquare,
   IconUsersGroup,
 } from '@tabler/icons-react';
+import { useContext } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import PATH from 'src/constants/path.constant';
+import { AppContext } from 'src/contexts/app.context';
 import { clearLS } from 'src/utils/auth';
 
 export default function NavBar() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { profile } = useContext(AppContext);
 
   const handleLogout = () => {
     clearLS();
@@ -26,60 +29,50 @@ export default function NavBar() {
 
   return (
     <Paper shadow="xs" p="sm">
-      <NavLink
-        label={<Text size="lg">Nhật ký của tôi</Text>}
-        icon={<IconNotebook size="1rem" stroke={1.5} />}
-        className="text-base"
-        component={Link}
-        to={PATH.myDiary}
-        active={location.pathname === PATH.myDiary}
-      ></NavLink>
-      <NavLink
-        label={<Text size="lg">Công cụ cảm xúc</Text>}
-        icon={<IconMoodHappy size="1rem" stroke={1.5} />}
-        className="text-base"
-        component={Link}
-        to={PATH.statisticTool}
-        active={location.pathname === PATH.statisticTool}
-      />
-      <NavLink
-        label={<Text size="lg">Quản trị người dùng</Text>}
-        icon={<IconUserSquare size="1rem" stroke={1.5} />}
-        className="text-base"
-      >
+      {profile?.roleId === 2 && (
         <NavLink
-          label={<Text size="lg">Danh sách người dùng</Text>}
-          icon={<IconUsersGroup size="1rem" stroke={1.5} />}
+          label={<Text size="lg">Nhật ký của tôi</Text>}
+          icon={<IconNotebook size="1rem" stroke={1.5} />}
           className="text-base"
           component={Link}
-          to={PATH.users}
-          active={location.pathname === PATH.users}
-        />
-        <NavLink
-          label={<Text size="lg">Thêm mới người dùng</Text>}
-          icon={<IconUserPlus size="1rem" stroke={1.5} />}
-          className="text-base"
-          component={Link}
-          to={PATH.addUser}
-          active={location.pathname === PATH.addUser}
-        />
-        {/* <NavLink
-          label={<Text size="lg">Công cụ hệ thống</Text>}
-          icon={<IconTool size="1rem" stroke={1.5} />}
-          className="text-base"
-        >
+          to={PATH.myDiary}
+          active={location.pathname === PATH.myDiary}
+        ></NavLink>
+      )}
+      {profile?.roleId === 1 && (
+        <>
           <NavLink
-            label={<Text size="lg">Danh mục cảm xúc</Text>}
-            icon={<IconMoodSearch size="1rem" stroke={1.5} />}
+            label={<Text size="lg">Công cụ cảm xúc</Text>}
+            icon={<IconMoodHappy size="1rem" stroke={1.5} />}
             className="text-base"
+            component={Link}
+            to={PATH.statisticTool}
+            active={location.pathname === PATH.statisticTool}
           />
           <NavLink
-            label={<Text size="lg">Slogan</Text>}
-            icon={<IconFlag2 size="1rem" stroke={1.5} />}
+            label={<Text size="lg">Quản trị người dùng</Text>}
+            icon={<IconUserSquare size="1rem" stroke={1.5} />}
             className="text-base"
-          />
-        </NavLink> */}
-      </NavLink>
+          >
+            <NavLink
+              label={<Text size="lg">Danh sách người dùng</Text>}
+              icon={<IconUsersGroup size="1rem" stroke={1.5} />}
+              className="text-base"
+              component={Link}
+              to={PATH.users}
+              active={location.pathname === PATH.users}
+            />
+            <NavLink
+              label={<Text size="lg">Thêm mới người dùng</Text>}
+              icon={<IconUserPlus size="1rem" stroke={1.5} />}
+              className="text-base"
+              component={Link}
+              to={PATH.addUser}
+              active={location.pathname === PATH.addUser}
+            />
+          </NavLink>
+        </>
+      )}
       <NavLink
         label={<Text size="lg">Tài khoản</Text>}
         icon={<IconUser size="1rem" stroke={1.5} />}

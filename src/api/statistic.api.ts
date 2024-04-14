@@ -7,12 +7,6 @@ const reactionApi = {
   getAllReactions() {
     return http.get<Reaction[]>(`${URL_REACTIONS}`);
   },
-  getPositiveReactions() {
-    return http.get<Reaction[]>(`${URL_REACTIONS}/positive`);
-  },
-  getNegativeReactions() {
-    return http.get<Reaction[]>(`${URL_REACTIONS}/negative`);
-  },
 };
 
 export default reactionApi;

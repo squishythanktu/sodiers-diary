@@ -1,16 +1,57 @@
-import { Badge, Box, Button, Grid, Select } from '@mantine/core';
+import { Box, Button, Card, Grid, Select, Text, TextInput } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
 import { useForm } from '@mantine/form';
+import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
+import diaryApi from 'src/api/diary.api';
+import reactionApi from 'src/api/reaction.api';
 
 export default function StatisticTool() {
+  const [statisticRequest, setStatisticRequest] = useState<{
+    startDate: string | undefined;
+    endDate: string | undefined;
+    reactionId: number | undefined;
+    hashtag: string | undefined;
+  }>({
+    startDate: '',
+    endDate: '',
+    reactionId: 0,
+    hashtag: '',
+  });
   const statisticForm = useForm({
     initialValues: {
       dateRange: undefined,
-      battalionId: 0,
+      reactionId: 0,
+      hashtag: '',
     },
   });
+  const { data: statisticsData } = useQuery({
+    queryKey: ['search diaries by statistic', statisticRequest],
+    queryFn: () => diaryApi.searchDiariesByStatistics(statisticRequest),
+  });
+  const { data: positiveData } = useQuery({
+    queryKey: ['positive reactions'],
+    queryFn: () => reactionApi.getPositiveReactions(),
+    staleTime: 5 * 60 * 1000,
+  });
+  const { data: negativeData } = useQuery({
+    queryKey: ['negative reactions'],
+    queryFn: () => reactionApi.getNegativeReactions(),
+    staleTime: 5 * 60 * 1000,
+  });
 
-  const handleSubmitStatisticForm = () => {};
+  const handleSubmitStatisticForm = (data: any) => {
+    const formattedData = {
+      hashtag: data.hashtag,
+      startDate: data.dateRange ? data.dateRange[0].toISOString() : null,
+      endDate: data.dateRange ? data.dateRange[1].toISOString() : null,
+      reactionId:
+        positiveData?.data.find((pr) => pr.name === data.reactionId)?.id ||
+        negativeData?.data.find((nr) => nr.name === data.reactionId)?.id ||
+        0,
+    };
+    setStatisticRequest(formattedData);
+  };
 
   return (
     <Box className="flex flex-col gap-4">
@@ -21,24 +62,41 @@ export default function StatisticTool() {
       >
         <Grid gutter="xl">
           <Grid.Col span={6}>
-            <div className="profile-field flex items-center gap-4">
-              <span className="w-48 font-bold">Chọn phạm vi</span>
-              <Select
-                placeholder="Đại đội"
-                data={['Đại đội 1', 'Đại đội 2']}
-                className="w-full"
-                {...statisticForm.getInputProps('battalionId')}
-              />
-            </div>
-          </Grid.Col>
-          <Grid.Col span={12}>
-            <div className="profile-field flex items-center gap-4">
+            <div className="statistic-field flex items-center gap-4">
               <span className="w-48 font-bold">Chọn khoảng thời gian</span>
               <DatePickerInput
                 placeholder="Chọn khoảng thời gian"
                 type="range"
-                className="w-80"
+                className="flex-grow"
                 {...statisticForm.getInputProps('dateRange')}
+              />
+            </div>
+          </Grid.Col>
+          <Grid.Col span={6}>
+            <div className="statistic-field flex items-center gap-4">
+              <span className="w-48 font-bold">Chọn cảm xúc</span>
+              <Select
+                searchable
+                placeholder="Chọn cảm xúc"
+                className="flex-grow"
+                data={[
+                  ...(positiveData?.data.map((r) => ({ value: r.name, label: r.name, group: 'Tích cực' })) ||
+                    []),
+                  ...(negativeData?.data.map((r) => ({ value: r.name, label: r.name, group: 'Tiêu cực' })) ||
+                    []),
+                ]}
+                {...statisticForm.getInputProps('reactionId')}
+              />
+            </div>
+          </Grid.Col>
+          <Grid.Col span={6}>
+            <div className="statistic-field flex items-center gap-4">
+              <span className="w-48 font-bold">Nhập hashtag</span>
+              <TextInput
+                className="flex-grow"
+                size="md"
+                placeholder="Nhập hashtag"
+                {...statisticForm.getInputProps('hashtag')}
               />
             </div>
           </Grid.Col>
@@ -47,62 +105,37 @@ export default function StatisticTool() {
           Thống kê
         </Button>
       </form>
-      <Grid gutter="xl">
+      <Grid>
         <Grid.Col span={6}>
-          <Box className="flex flex-col gap-4">
-            <Box className="rounded-lg border-[2px] border-solid border-yellow-600 p-1 text-center">
-              Theo cảm xúc
-            </Box>
-            <Grid>
-              <Grid.Col className="flex flex-col gap-4" span={6}>
-                <Box className="rounded-lg border-[2px] border-solid border-yellow-600 p-1 text-center">
-                  Tích cực
-                </Box>
-                <Box className="flex flex-col gap-4 rounded-lg border-[2px] border-solid border-yellow-600 p-4 text-center">
-                  <Badge className="w-fit" color="orange">
-                    Thích thú
-                  </Badge>
-                  <Badge className="w-fit" color="orange">
-                    Vui sướng
-                  </Badge>
-                  <Badge className="w-fit" color="orange">
-                    Phấn khởi
-                  </Badge>
-                  <Badge className="w-fit" color="orange">
-                    Hạnh phúc
-                  </Badge>
-                  <Badge className="w-fit" color="orange">
-                    Lạc quan
-                  </Badge>
-                </Box>
-              </Grid.Col>
-              <Grid.Col className="flex flex-col gap-4" span={6}>
-                <Box className="rounded-lg border-[2px] border-solid border-blue-600 p-1 text-center">
-                  Tiêu cực
-                </Box>
-                <Box className="flex flex-col gap-4 rounded-lg border-[2px] border-solid border-blue-600 p-4 text-center">
-                  <Badge className="w-fit">Mệt mỏi</Badge>
-                  <Badge className="w-fit">Lo lắng</Badge>
-                  <Badge className="w-fit">Buồn bã</Badge>
-                  <Badge className="w-fit">Chán nản</Badge>
-                  <Badge className="w-fit">Thất vọng</Badge>
-                  <Badge className="w-fit">Căng thẳng</Badge>
-                  <Badge className="w-fit">Bị áp lực</Badge>
-                  <Badge className="w-fit">Chưa đoàn kết</Badge>
-                </Box>
-              </Grid.Col>
-            </Grid>
-          </Box>
+          <Card shadow="sm" padding="lg" radius="md" withBorder>
+            <Text fw={500}>Kết quả thống kê theo cảm xúc</Text>
+
+            <Text size="sm" c="dimmed">
+              {statisticsData?.data.map((data) => {
+                if (!data.isReaction) return;
+                return (
+                  <p>
+                    {data.elementName}: {data.quantity}
+                  </p>
+                );
+              })}
+            </Text>
+          </Card>
         </Grid.Col>
         <Grid.Col span={6}>
-          <Box className="flex flex-col gap-4">
-            <Box className="rounded-lg border-[2px] border-solid border-yellow-600 p-1 text-center">
-              Theo hashtag
-            </Box>
-            <Box className="flex flex-col gap-4 rounded-lg border-[2px] border-solid border-yellow-600 p-4">
-              <h3 className="m-0">Chọn hashtag:</h3>
-            </Box>
-          </Box>
+          <Card shadow="sm" padding="lg" radius="md" withBorder>
+            <Text fw={500}>Kết quả thống kê theo hashtag</Text>
+            <Text size="sm" c="dimmed">
+              {statisticsData?.data.map((data) => {
+                if (data.isReaction) return;
+                return (
+                  <p>
+                    {data.elementName}: {data.quantity}
+                  </p>
+                );
+              })}
+            </Text>
+          </Card>
         </Grid.Col>
       </Grid>
     </Box>
