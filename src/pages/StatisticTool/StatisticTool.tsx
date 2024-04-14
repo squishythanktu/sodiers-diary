@@ -26,8 +26,10 @@ export default function StatisticTool() {
     },
   });
   const { data: statisticsData } = useQuery({
+    
     queryKey: ['search diaries by statistic', statisticRequest],
     queryFn: () => diaryApi.searchDiariesByStatistics(statisticRequest),
+    
   });
   const { data: positiveData } = useQuery({
     queryKey: ['positive reactions'],
@@ -42,15 +44,18 @@ export default function StatisticTool() {
 
   const handleSubmitStatisticForm = (data: any) => {
     const formattedData = {
-      hashtag: data.hashtag,
-      startDate: data.dateRange ? data.dateRange[0].toISOString() : null,
-      endDate: data.dateRange ? data.dateRange[1].toISOString() : null,
       reactionId:
         positiveData?.data.find((pr) => pr.name === data.reactionId)?.id ||
         negativeData?.data.find((nr) => nr.name === data.reactionId)?.id ||
         0,
+      hashtag: data.hashtag,
+      startDate: data.dateRange ? data.dateRange[0].toISOString() : null,
+      endDate: data.dateRange ? data.dateRange[1].toISOString() : null,
+      endDateAsDateTime: data.dateRange ? data.dateRange[1].toISOString() : null,
+      startDateAsDateTime: data.dateRange ? data.dateRange[0].toISOString() : null,
     };
     setStatisticRequest(formattedData);
+    statisticForm.reset()
   };
 
   return (
