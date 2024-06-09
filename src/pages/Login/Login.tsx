@@ -1,6 +1,5 @@
-import { Box, Button, Group, PasswordInput, TextInput, rem } from '@mantine/core';
+import { Box, Button, Group, PasswordInput, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { IconStar } from '@tabler/icons-react';
 import { useMutation } from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
 import { useContext } from 'react';
@@ -41,14 +40,6 @@ const Login: React.FC = () => {
           maxWidth: '100%',
         }}
       >
-        <div className="mb-2 flex flex-col items-center justify-center">
-          <div className="flex items-center gap-2">
-            <IconStar style={{ width: rem(40), height: rem(40) }} stroke={1.5} fill="yellow" color="yellow" />
-            <h1 className="m-0 text-[40px] text-red-500">Nhật ký điện tử</h1>
-            <IconStar style={{ width: rem(40), height: rem(40) }} stroke={1.5} fill="yellow" color="yellow" />
-          </div>
-          <h2 className="text-[25px] text-green-500">Sẻ chia & Thấu hiểu</h2>
-        </div>
         <form onSubmit={loginForm.onSubmit(handleLogin)} className="flex w-full flex-col gap-4">
           <div className="form__inputs mt-4 flex flex-col gap-4">
             <TextInput

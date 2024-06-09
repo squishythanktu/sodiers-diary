@@ -1,5 +1,5 @@
 const config = {
-  baseUrl: 'https://20.189.114.83/api',
+  baseUrl: 'https://103.70.114.20/api',
 };
 
 export default config;
