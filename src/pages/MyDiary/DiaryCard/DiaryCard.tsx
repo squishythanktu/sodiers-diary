@@ -1,5 +1,7 @@
 import { Badge, Card, Group, Text } from '@mantine/core';
+import { useQuery } from '@tanstack/react-query';
 import dayjs from 'dayjs';
+import reactionApi from 'src/api/reaction.api';
 import { Diary } from 'src/types/diary.type';
 
 interface DiaryCardProps {
@@ -7,6 +9,12 @@ interface DiaryCardProps {
 }
 
 export default function DiaryCard({ data }: DiaryCardProps) {
+  const { data: reactionData } = useQuery({
+    queryKey: ['get all reactions'],
+    queryFn: () => reactionApi.getAllReactions(),
+    staleTime: 5 * 60 * 1000,
+  });
+
   return (
     <Card shadow="sm" padding="lg" radius="md" mb="sm" withBorder>
       <Group className="flex justify-between" mb="xs">
@@ -17,7 +25,9 @@ export default function DiaryCard({ data }: DiaryCardProps) {
 
       <Text size="sm" c="dimmed" mt="xs" mb="xs">
         <strong>Bạn đang cảm thấy: </strong>
-        <span>{data.reactionId}</span>
+        {reactionData && reactionData.data && (
+          <span>{reactionData.data.find((reaction) => reaction.id === data.reactionId)?.name}</span>
+        )}
       </Text>
       <Text size="sm" c="dimmed" mt="xs" mb="xs">
         <strong>Lý do: </strong>

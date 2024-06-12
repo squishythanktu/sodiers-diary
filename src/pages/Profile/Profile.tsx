@@ -144,10 +144,10 @@ export default function Profile() {
           </Grid.Col>
           <Grid.Col span={6}>
             <div className="profile-field flex items-center gap-4">
-              <span className="w-28 font-bold">Đại đội</span>
+              <span className="w-28 font-bold">Đơn vị</span>
               <Select
                 searchable
-                placeholder="Đại đội"
+                placeholder="Đơn vị"
                 data={companiesData?.data.map((r) => r.name) || []}
                 {...profileForm.getInputProps('companiesId')}
               />

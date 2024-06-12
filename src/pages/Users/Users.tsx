@@ -76,7 +76,7 @@ export default function Users() {
             <th>Họ và tên</th>
             <th>Cấp bậc</th>
             <th>Chức vụ</th>
-            <th>Đại đội</th>
+            <th>Đơn vị</th>
             <th>Vai trò</th>
             <th>#</th>
           </tr>
