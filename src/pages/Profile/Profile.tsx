@@ -22,6 +22,8 @@ export default function Profile() {
       rankId: null,
       positionId: null,
       companiesId: null,
+      subCompanyId: null,
+      departmentCompanyId: null,
     },
     validate: {
       email: (value) => (value != undefined ? (/^\S+@\S+$/.test(value) ? null : 'Invalid email') : null),
@@ -46,10 +48,19 @@ export default function Profile() {
     queryKey: [`companies`],
     queryFn: () => companiesApi.getCompanies(),
   });
+  const { data: subCompaniesData } = useQuery({
+    queryKey: [`sub companies`],
+    queryFn: () => companiesApi.getSubCompanies(),
+  });
+  const { data: departmentCompaniesData } = useQuery({
+    queryKey: [`department companies`],
+    queryFn: () => companiesApi.getDepartmentCompanies(),
+  });
 
   useEffect(() => {
     if (profileData?.data) {
-      const { name, phoneNumber, email, rankId, positionId, companiesId } = profileData.data;
+      const { name, phoneNumber, email, rankId, positionId, companiesId, subCompanyId, departmentCompanyId } =
+        profileData.data;
       profileForm.setValues({
         name: name || '',
         phoneNumber: phoneNumber || '',
@@ -57,9 +68,12 @@ export default function Profile() {
         rankId: (ranksData?.data.find((r) => r.id === rankId)?.name as any) || null,
         positionId: (positionsData?.data.find((p) => p.id === positionId)?.name as any) || null,
         companiesId: (companiesData?.data.find((c) => c.id === companiesId)?.name as any) || null,
+        subCompanyId: (subCompaniesData?.data.find((c) => c.id === subCompanyId)?.name as any) || null,
+        departmentCompanyId:
+          (departmentCompaniesData?.data.find((c) => c.id === departmentCompanyId)?.name as any) || null,
       });
     }
-  }, [profileData]);
+  }, [profileData, , ranksData, positionsData, companiesData, subCompaniesData, departmentCompaniesData]);
 
   const getRankIdByName = (name: string | undefined) =>
     ranksData?.data.find((r) => r.name === name)?.id || null;
@@ -70,12 +84,20 @@ export default function Profile() {
   const getCompanyIdByName = (name: string | undefined) =>
     companiesData?.data.find((c) => c.name === name)?.id || null;
 
+  const getSubCompanyIdByName = (name: string | undefined) =>
+    subCompaniesData?.data.find((c) => c.name === name)?.id || null;
+
+  const getDepartmentCompanyIdByName = (name: string | undefined) =>
+    departmentCompaniesData?.data.find((c) => c.name === name)?.id || null;
+
   const handleUpdateProfile = (data: ProfileFormData) => {
     const formattedData: ProfileFormData = {
       ...data,
       rankId: getRankIdByName(data.rankId?.toString()),
       positionId: getPositionIdByName(data.positionId?.toString()),
       companiesId: getCompanyIdByName(data.companiesId?.toString()),
+      subCompanyId: getSubCompanyIdByName(data.subCompanyId?.toString()),
+      departmentCompanyId: getDepartmentCompanyIdByName(data.departmentCompanyId?.toString()),
     };
 
     updateUserProfileMutation.mutate(formattedData, {
@@ -152,6 +174,38 @@ export default function Profile() {
                 {...profileForm.getInputProps('companiesId')}
               />
             </div>
+          </Grid.Col>
+          <Grid.Col span={6}>
+            <div className="profile-field flex items-center gap-4">
+              <span className="w-28 font-bold">Đơn vị cấp 2</span>
+              <Select
+                searchable
+                placeholder="Đơn vị"
+                data={subCompaniesData?.data.map((r) => r.name) || []}
+                {...profileForm.getInputProps('subCompanyId')}
+              />
+            </div>
+          </Grid.Col>
+          <Grid.Col span={6}>
+            <div className="profile-field flex items-center gap-4">
+              <span className="w-28 font-bold">Phòng ban</span>
+              <Select
+                searchable
+                placeholder="Đơn vị"
+                data={departmentCompaniesData?.data.map((r) => r.name) || []}
+                {...profileForm.getInputProps('departmentCompanyId')}
+              />
+            </div>
+          </Grid.Col>
+          <Grid.Col span={12}>
+            <span className="mr-2 font-bold">Cấp đã chọn:</span>
+            {profileForm.values.departmentCompanyId && (
+              <span className="mr-2">{profileForm.values.departmentCompanyId}/</span>
+            )}
+            {profileForm.values.subCompanyId && (
+              <span className="mr-2">{profileForm.values.subCompanyId}/</span>
+            )}
+            {profileForm.values.companiesId && <span className="mr-2">{profileForm.values.companiesId}</span>}
           </Grid.Col>
         </Grid>
         <Button className="ml-auto w-fit" type="submit">

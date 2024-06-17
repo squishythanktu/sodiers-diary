@@ -8,6 +8,8 @@ export interface User {
   rankId: number | null;
   positionId: number | null;
   companiesId: number | null;
+  subCompanyId: number | null;
+  departmentCompanyId: number | null;
 }
 
 export type UserReq = {
