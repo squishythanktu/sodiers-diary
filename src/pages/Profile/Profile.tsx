@@ -188,7 +188,7 @@ export default function Profile() {
           </Grid.Col>
           <Grid.Col span={6}>
             <div className="profile-field flex items-center gap-4">
-              <span className="w-28 font-bold">Phòng ban</span>
+              <span className="w-28 font-bold">Bộ phận</span>
               <Select
                 searchable
                 placeholder="Đơn vị"
